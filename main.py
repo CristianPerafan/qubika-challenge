@@ -1,16 +1,14 @@
-# This is a sample Python script.
+import os
 
-# Press Mayús+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from dotenv import load_dotenv
 
+load_dotenv()
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+if not os.environ.get("OPENAI_API_KEY"):
+    os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
+from src.tools.news_scrapper import download_articles_from_sites
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+sites = ['https://www.eltiempo.com/', 'https://www.lasillavacia.com/']
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+download_articles_from_sites(sites, limit=1)
