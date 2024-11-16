@@ -1,13 +1,15 @@
+from importlib.metadata import metadata
+
 import requests
 
 from bs4 import BeautifulSoup
+from langchain_core.documents import Document
 
-from src.agents.news_agent import NewsAgent
+from src.agents.news_parser_agent import NewsParserAgent
 from src.model.schemas import NewSnippet, New
 
 # Set up the newsagent
-news_agent = NewsAgent(local_agent=False)
-news_agent.setup_agent()
+news_agent = NewsParserAgent(local_agent=False)
 
 def search_articles_urls_from_site(site_url: str, limit: int = 5) -> list[NewSnippet]:
     """
@@ -36,7 +38,6 @@ def search_articles_urls_from_site(site_url: str, limit: int = 5) -> list[NewSni
 
         return news_snippet_info
     else:
-        print('An error has occurred while getting the news')
         return []
 
 def get_authors_from_article(response_text: str):
@@ -62,29 +63,24 @@ def get_date_from_article(response_text: str):
 def get_content_from_article(response_text: str):
     soup = BeautifulSoup(response_text, 'html.parser')
     # Remove scripts and styles
-    for script in soup(["script", "style"]):
-        script.extract()
+    for tag in soup(['script', 'style', 'header', 'footer', 'nav', 'aside', 'form']):
+        tag.decompose()
 
-    # Get the content of the article
-    text = soup.get_text()
+    # Extraer solo el texto visible
+    text = soup.get_text(separator=' ', strip=True)
 
-    # Break into lines and remove leading and trailing space on each
-    lines = (line.strip() for line in text.splitlines())
+    # Eliminar líneas vacías y espacios adicionales
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    clean_text = ' '.join(lines)
 
-    # Break multi-headlines into a line each
-    chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+    return clean_text
 
-    # Drop blank lines
-    text = '\n'.join(chunk for chunk in chunks if chunk)
 
-    return text
 def get_resources_url_from_article(response_text: str):
     soup = BeautifulSoup(response_text, 'html.parser')
     resources = soup.find_all('a', href=True)
     resources_url = [resource['href'] for resource in resources]
     return resources_url
-
-
 
 def get_general_information_from_article(article : NewSnippet):
     """
@@ -102,10 +98,6 @@ def get_general_information_from_article(article : NewSnippet):
 
     return author, date, content
 
-
-
-
-
 def download_articles_from_sites(sites: list[str], limit: int = 1):
     """
     Download news articles from a list of sites
@@ -122,7 +114,6 @@ def download_articles_from_sites(sites: list[str], limit: int = 1):
 
     save_articles_to_json(articles, 'data/articles.json')
 
-    return articles
 
 def save_articles_to_json(articles: list[New], file_name: str):
     """
@@ -133,7 +124,39 @@ def save_articles_to_json(articles: list[New], file_name: str):
         json.dump([article.model_dump() for article in articles], file, indent=4)
 
 
+def load_articles_from_json(file_name: str)-> list[New]:
+    """
+    Load the articles from a json file
+    """
+    import json
 
+    try:
+        with open(file_name, 'r') as file:
+            articles = json.load(file)
+    except Exception as e:
+        return []
 
+    return [New(**article) for article in articles]
+
+def load_articles_from_json_as_documents(file_name: str):
+    """
+    Load the articles from a json file as documents
+    """
+    news = load_articles_from_json(file_name)
+
+    documents = []
+    for article in news:
+        documents.append(Document(
+            page_content=article.content,
+            metadata={
+                "title": article.title,
+                "source": article.source,
+                "author": ", ".join(article.author),
+                "url": article.url,
+                "date": article.publication_date
+            }
+        ))
+
+    return documents
 
 

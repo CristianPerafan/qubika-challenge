@@ -16,3 +16,6 @@ env
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Database All folder or files in chroma
+chroma/

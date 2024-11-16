@@ -6,5 +6,4 @@ def convert_llm_response_to_json(llm_response):
         response = json.loads(cleaned_response)
         return response
     except Exception as e:
-        print(f"Error converting LLM response to JSON: {e}")
         raise
