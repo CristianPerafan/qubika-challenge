@@ -65,6 +65,15 @@ def main():
     if st.button("Almacenar artículo"):
         if not url:
             st.error("Debe ingresar una URL")
+        else:
+            if url.startswith("https://www.eltiempo.com/") or url.startswith("https://www.lasillavacia.com/"):
+                with st.spinner("Almacenando artículo..."):
+                    from src.tools.news_scrapper import download_article_from_url
+                    download_article_from_url(url)
+                    st.success("Artículo almacenado con éxito.")
+                    config.DB_NEEDS_TO_BE_UPDATED = True
+            else:
+                st.error("La URL ingresada no es válida. Debe ser de uno de los sitios web mencionados.")
 
     Navbar()
 

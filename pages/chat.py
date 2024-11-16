@@ -1,11 +1,14 @@
 import streamlit as st
 
+import shortuuid
+
 from modules.nav import Navbar
 
 from src.model.schemas import New
 from src.tools.news_scrapper import load_articles_from_json
 from src.agents.news_agent import NewsAgent
 from src import config
+from src.tools.voice import verify_audio_exists, get_audio_path, text_to_speech, autoplay_audio
 
 
 @st.cache_resource
@@ -30,21 +33,49 @@ def main():
         news_agent_instance.setup_vector_db()
         config.DB_NEEDS_TO_BE_UPDATED = False
 
+    if "messages" not in st.session_state:
+        st.session_state.messages = [
+            {"id": shortuuid.uuid(),"role": "assistant", "content": "¡Bienvenido al chatbot de noticias! Puedo responder a tus preguntas sobre las noticias almacenadas en la base de datos."}
+        ]
 
-    with st.chat_message("assistant"):
-        st.markdown(
-            """
-            ¡Bienvenido al chatbot de noticias! Puedo responder a tus preguntas sobre las noticias almacenadas en la base de datos.
-            """
-        )
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
+            if st.button("🔈", key=message["id"]):
+                with st.spinner("Cargando audio..."):
+                    print("Cargando audio...")
+                    audio_file = None
+                    if verify_audio_exists(message["id"]):
+                        print("Audio ya existe")
+                        audio_file = get_audio_path(message["id"])
+                    else:
+                        print("Audio no existe")
+                        print(message["id"])
+                        audio_file = text_to_speech(message["content"], message["id"])
+
+                    print("Reproduciendo audio", audio_file)
+                    autoplay_audio(audio_file)
+
+
+
 
     if user_input := st.chat_input("¿En qué puedo ayudarte?"):
+        st.session_state.messages.append({"id": shortuuid.uuid(), "role": "user", "content": user_input})
         with st.chat_message("user"):
             st.markdown(user_input)
 
         with st.chat_message("assistant"):
-            response = news_agent_instance.query_agent(user_input)
-            st.markdown(response)
+            with st.spinner("Pensando🤔.."):
+                response = news_agent_instance.query_agent(user_input)
+                id_ = shortuuid.uuid()
+                print(id_)
+                st.session_state.messages.append({"id": id_,"role": "assistant", "content": response})
+                st.markdown(response)
+                if st.button("🔈", key=id_):
+                    with st.spinner("Cargando audio..."):
+                        audio_file = text_to_speech(response, id_)
+                        print(audio_file)
+                        autoplay_audio(audio_file)
 
 
 

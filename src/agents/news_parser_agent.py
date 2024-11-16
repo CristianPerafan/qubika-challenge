@@ -54,14 +54,15 @@ class NewsParserAgent:
 
 
 
-    def get_structured_information_from_article(self, title, source,author, content, url):
+    def get_structured_information_from_article(self, title, source,author, content, url,date):
         response = self.news_parser_chain.invoke(
             {
                 "title": title,
                 "source": source,
                 "author": author,
                 "content": content,
-                "url": url
+                "url": url,
+                "date": date
             }
         )
 

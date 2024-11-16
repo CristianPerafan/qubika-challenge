@@ -19,3 +19,6 @@ __pycache__/
 
 # Database All folder or files in chroma
 chroma/
+
+# Audio files
+*.m4a

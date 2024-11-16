@@ -1,12 +1,14 @@
-from importlib.metadata import metadata
-
 import requests
+
+
 
 from bs4 import BeautifulSoup
 from langchain_core.documents import Document
 
 from src.agents.news_parser_agent import NewsParserAgent
 from src.model.schemas import NewSnippet, New
+
+
 
 # Set up the newsagent
 news_agent = NewsParserAgent(local_agent=False)
@@ -60,20 +62,26 @@ def get_date_from_article(response_text: str):
 
     return date
 
+
 def get_content_from_article(response_text: str):
     soup = BeautifulSoup(response_text, 'html.parser')
     # Remove scripts and styles
     for tag in soup(['script', 'style', 'header', 'footer', 'nav', 'aside', 'form']):
         tag.decompose()
 
-    # Extraer solo el texto visible
-    text = soup.get_text(separator=' ', strip=True)
+
+
+    main_content  = soup.find('div', class_='c-detail__body') or soup.find('div', class_='entry-content')
+
+    text = main_content.get_text(separator=' ', strip=True)
 
     # Eliminar líneas vacías y espacios adicionales
     lines = [line.strip() for line in text.splitlines() if line.strip()]
+
     clean_text = ' '.join(lines)
 
     return clean_text
+
 
 
 def get_resources_url_from_article(response_text: str):
@@ -81,6 +89,14 @@ def get_resources_url_from_article(response_text: str):
     resources = soup.find_all('a', href=True)
     resources_url = [resource['href'] for resource in resources]
     return resources_url
+
+def get_title_from_article(response_text: str):
+    soup = BeautifulSoup(response_text, 'html.parser')
+    title = title_.text.strip() if (title_ := soup.find('h1', class_='entry-title ')) else None
+    if not title:
+        title = title_.text.strip() if (title_ := soup.find('h1', class_='c-detail__title')) else 'Unknown'
+
+    return title
 
 def get_general_information_from_article(article : NewSnippet):
     """
@@ -98,6 +114,29 @@ def get_general_information_from_article(article : NewSnippet):
 
     return author, date, content
 
+
+def download_article_from_url(url: str):
+    """
+    Download a single article from a URL
+    """
+    response = requests.get(url)
+    if response.status_code == 200:
+        author = get_authors_from_article(response.text)
+        date = get_date_from_article(response.text)
+        content = get_content_from_article(response.text)
+        resources = get_resources_url_from_article(response.text)
+        title = get_title_from_article(response.text)
+
+        json_object = news_agent.get_structured_information_from_article(title, url, author, content, resources, date)
+
+        new = New(**json_object)
+
+        existing_news: list[New] = load_articles_from_json('data/articles.json')
+
+        existing_news.append(new)
+
+        save_articles_to_json(existing_news, 'data/articles.json')
+
 def download_articles_from_sites(sites: list[str], limit: int = 1):
     """
     Download news articles from a list of sites
@@ -108,7 +147,7 @@ def download_articles_from_sites(sites: list[str], limit: int = 1):
         articles_snippets = search_articles_urls_from_site(site, limit)
         for article_snippet in articles_snippets:
             author, date, content = get_general_information_from_article(article_snippet)
-            json_object = news_agent.get_structured_information_from_article(article_snippet.title, article_snippet.source, author, content, article_snippet.url)
+            json_object = news_agent.get_structured_information_from_article(article_snippet.title, article_snippet.source, author, content, article_snippet.url, date)
             article = New(**json_object)
             articles.append(article)
 
@@ -120,9 +159,11 @@ def save_articles_to_json(articles: list[New], file_name: str):
     Save the articles in a json file
     """
     import json
-    with open(file_name, 'w') as file:
-        json.dump([article.model_dump() for article in articles], file, indent=4)
-
+    try:
+        with open(file_name, 'w') as file:
+            json.dump([article.model_dump() for article in articles], file, indent=4)
+    except Exception as e:
+        print(f"Error saving articles: {e}")
 
 def load_articles_from_json(file_name: str)-> list[New]:
     """
@@ -134,6 +175,7 @@ def load_articles_from_json(file_name: str)-> list[New]:
         with open(file_name, 'r') as file:
             articles = json.load(file)
     except Exception as e:
+        print(f"Error loading articles: {e}")
         return []
 
     return [New(**article) for article in articles]

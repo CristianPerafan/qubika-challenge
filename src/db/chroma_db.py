@@ -64,3 +64,4 @@ def save_to_chroma_v2(chunks: list[Document],embedding_model):
     vector_db.add_documents(chunks)
 
     return vector_db
+
