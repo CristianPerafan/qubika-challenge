@@ -64,6 +64,7 @@ def main():
         with st.chat_message("assistant"):
             with st.spinner("Pensando🤔.."):
                 response = news_agent_instance.advance_query(user_input)
+                print(response)
                 id_ = shortuuid.uuid()
                 st.session_state.messages.append({"id": id_,"role": "assistant", "content": response})
                 st.markdown(response)

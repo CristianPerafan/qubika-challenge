@@ -22,3 +22,8 @@ chroma/
 
 # Audio files
 *.m4a
+
+
+# Test cache
+.deepeval-cache.json
+.deepeval_telemtry.txt

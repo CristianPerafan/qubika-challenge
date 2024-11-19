@@ -46,7 +46,7 @@ Sigue estas directrices:
     - Resumen de la noticia 1
     - Título de la noticia 2
     - Resumen de la noticia 2
-    - Comparación: Breve análisis comparativo entre las dos noticias.
+    - Comparación: Breve comparación entre las dos noticias.
 
 
 Tienes acceso a las siguientes noticias:
