@@ -22,6 +22,10 @@ la accesibilidad y el uso de información estructurada en contextos reales.
 Puedes consultar el reporte detallado del sistema en el archivo [`report.md`](./report/report.md).
 
 
+## **Arquitectura**
+
+![Arquitectura](./report/img/diagram.png)
+
 
 ## **Configuración**
 
