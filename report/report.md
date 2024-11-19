@@ -16,6 +16,10 @@ el módulo de base de datos, el módulo de generación de respuestas y el módul
 A continuación, se describe en detalle cada uno de 
 estos componentes.  
 
+Diagrama de la arquitectura del sistema:
+
+![Arquitectura del Sistema](./img/diagram.png)
+
 ### **Módulo de *Scraping***  
 
 El módulo de *scraping* tiene como objetivo principal la extracción de noticias desde los sitios web *El Tiempo* y 
@@ -35,7 +39,11 @@ Para cada artículo procesado, se recopilan los siguientes datos:
 - **Fuente:** El medio de comunicación de origen de la noticia (*El Tiempo* o *La Silla Vacía*).  
 - **URL:** La dirección web de la noticia.  
 - **Fecha de Publicación:** La fecha en la que se publicó la noticia.  
-- **Autor:** El nombre del autor de la noticia, cuando está disponible.  
+- **Autor:** El nombre del autor de la noticia, cuando está disponible. 
+
+Diagrama del proceso de *scraping*:
+
+![Proceso de Scraping](./img/scraping.png)
 
 ### **Módulo de Base de Datos**  
 
@@ -116,5 +124,41 @@ la respuesta generada con una salida esperada predefinida. La evaluación incluy
 discrepancia entre la respuesta generada y la esperada era considerada como un fallo. Este enfoque permitió verificar 
 que el modelo no solo ofreciera respuestas relevantes, sino que fueran precisas y consistentes con el contenido de los 
 documentos extraídos.
+
+## **Pruebas**
+Las pruebas se realizarón utilizando `DeepEval`, se buscó evaluar la relevancia y correctitud de las respuestas generadas
+por el sistema. Los resultados obtenidos fueron los siguientes:
+
+
+### Test: Evaluación de Relevancia de la Respuesta Generada
+
+- **Descripción:** Este test evalúa la relevancia de las respuestas generadas por el modelo RAG en relación con el 
+  contexto de recuperación.
+- **Contexto:** El test fue realizado utilizando como referencia principal el artículo titulado *"Presidente Gustavo 
+  Petro llegó a Brasil para participar de la cumbre del G20"*, publicado por *El Tiempo*.
+
+### Test: Evaluación de Relevancia y Correctitud de la Respuesta Generada
+
+- **Descripción:** Este test evalúa tanto la relevancia como la correctitud de las respuestas generadas por el modelo 
+  RAG en relación con el contexto de recuperación y la precisión de los detalles proporcionados.
+- **Contexto:** El test fue realizado utilizando como referencia principal el artículo titulado 
+  *"Presidente Gustavo Petro llegó a Brasil para participar de la cumbre del G20"*, publicado por *El Tiempo*.
+
+### **Resultados del Test:**
+1. **Relevancia:**
+   - **Métrica evaluada:** Relevancia de la respuesta.
+   - **Puntuación obtenida:** 0.56 (umbral: 0.5).  
+     La respuesta contiene información relevante sobre el propósito principal de la cumbre del G20, aunque incluye 
+     secciones que no abordan directamente este propósito, como un resumen más amplio y detalles específicos no 
+     relacionados.
+
+2. **Correctitud:**
+   - **Métrica evaluada:** Correctitud de la respuesta.
+   - **Resultado:** La respuesta generada contiene información precisa y coherente con el contenido del artículo de 
+     referencia.
+
+**Captura de Pantalla del Resultado:**
+![Resultados del Test](./img/test.png)
+
 
 
