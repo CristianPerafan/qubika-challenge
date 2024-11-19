@@ -37,11 +37,16 @@ def load_from_chroma(embedding_model):
     Returns:
         Chroma: Chroma database
     """
-    db = Chroma(
-        persist_directory=CHROMA_PATH,
+    chroma_client = chromadb.HttpClient(host='localhost', port=8000)
+
+    vector_db = Chroma(
+        client=chroma_client,
+        collection_name='news',
         embedding_function=embedding_model
     )
-    return db
+
+
+    return vector_db
 
 def save_to_chroma_v2(chunks: list[Document],embedding_model):
     """

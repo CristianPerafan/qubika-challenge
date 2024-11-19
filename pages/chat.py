@@ -32,6 +32,8 @@ def main():
     if config.DB_NEEDS_TO_BE_UPDATED:
         news_agent_instance.setup_vector_db()
         config.DB_NEEDS_TO_BE_UPDATED = False
+    else:
+        pass
 
     if "messages" not in st.session_state:
         st.session_state.messages = [
@@ -43,17 +45,12 @@ def main():
             st.write(message["content"])
             if st.button("🔈", key=message["id"]):
                 with st.spinner("Cargando audio..."):
-                    print("Cargando audio...")
                     audio_file = None
                     if verify_audio_exists(message["id"]):
-                        print("Audio ya existe")
                         audio_file = get_audio_path(message["id"])
                     else:
-                        print("Audio no existe")
                         print(message["id"])
                         audio_file = text_to_speech(message["content"], message["id"])
-
-                    print("Reproduciendo audio", audio_file)
                     autoplay_audio(audio_file)
 
 
@@ -66,15 +63,13 @@ def main():
 
         with st.chat_message("assistant"):
             with st.spinner("Pensando🤔.."):
-                response = news_agent_instance.query_agent(user_input)
+                response = news_agent_instance.advance_query(user_input)
                 id_ = shortuuid.uuid()
-                print(id_)
                 st.session_state.messages.append({"id": id_,"role": "assistant", "content": response})
                 st.markdown(response)
                 if st.button("🔈", key=id_):
                     with st.spinner("Cargando audio..."):
                         audio_file = text_to_speech(response, id_)
-                        print(audio_file)
                         autoplay_audio(audio_file)
 
 

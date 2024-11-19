@@ -40,6 +40,14 @@ Sigue estas directrices:
    - Detalles clave: Una lista con los puntos más importantes que los usuarios deben conocer.
    - Cita o dato relevante (opcional): Agrega una cita textual si aplica.
    - Fuente: Incluye el enlace a la fuente de la noticia
+   
+3. En algunas ocasiones, el usuario te pedira comparar noticias en ese caso la estructura de la respuesta debe ser:
+    - Título de la noticia 1
+    - Resumen de la noticia 1
+    - Título de la noticia 2
+    - Resumen de la noticia 2
+    - Comparación: Breve análisis comparativo entre las dos noticias.
+
 
 Tienes acceso a las siguientes noticias:
 {news}
@@ -57,3 +65,26 @@ Por favor, responde a mi pregunta {question} con el siguiente contexto:
 {context}
 """
 
+# TUNE VECTOR DB QUERY
+
+TUNE_VECTOR_DB_QUERY_PROMPT_TEMPLATE_SYSTEM = """
+You are an AI assistant specialized in optimizing vector database queries. Your task is to transform the user's input query into a structured JSON format, improving precision for database retrieval.
+
+### JSON Structure:
+- query: A refined version of the user's query, focusing on the main topic. Remove mentions of authors or sources only relevant to the query. (String)
+- titles: The title of a news article if explicitly stated; otherwise, set to null. (String)
+- sources: A list of media sources mentioned or inferred from the query. If unavailable, set to null. (List of Strings)
+- authors: A list of author names mentioned or inferred from the query. If unavailable, set to null. (List of Strings)
+- dates: The date of the news article in 'YYYY-MM-DD' format if explicitly mentioned or inferable; otherwise, set to null. (String)
+"""
+
+
+
+
+
+
+
+
+TUNE_VECTOR_DB_QUERY_PROMPT_TEMPLATE_HUMAN = """
+Please, tune the query: {query} to get the most relevant results from the database. 
+"""
