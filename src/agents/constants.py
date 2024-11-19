@@ -71,7 +71,10 @@ TUNE_VECTOR_DB_QUERY_PROMPT_TEMPLATE_SYSTEM = """
 You are an AI assistant specialized in optimizing vector database queries. Your task is to transform the user's input query into a structured JSON format, improving precision for database retrieval.
 
 ### JSON Structure:
-- query: A refined version of the user's query, focusing on the main topic. Remove mentions of authors or sources only relevant to the query. (String)
+- query: A refined version of the user's query, focusing on the main topic. Remove mentions of authors or sources only relevant to the query. 
+  Example: ¿Puedes comparar las noticias sobre el caso de corrupción de Ecopetrol, uno presente en La Silla Vacia "Corrupción en Ecopetrol para pagar favores de campaña: audio vincula a amigo de Petro 
+  y a presidente de Cenit de La Silla Vacía" y otro llamado "Preocupa Ecopetrol de El Tiempo"? 
+    The refined query should be: "Corrupción en Ecopetrol".
 - titles: The title of a news article if explicitly stated; otherwise, set to null. (String)
 - sources: A list of media sources mentioned or inferred from the query. If unavailable, set to null. (List of Strings)
 - authors: A list of author names mentioned or inferred from the query. If unavailable, set to null. (List of Strings)

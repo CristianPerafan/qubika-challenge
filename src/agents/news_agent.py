@@ -56,7 +56,7 @@ class NewsAgent:
 
     def set_up_llm(self):
         self.llm = ChatOpenAI(
-            model="gpt-3.5-turbo-0125",
+            model="gpt-4o",
             temperature=0,
             max_tokens=None,
             timeout=None,
@@ -96,13 +96,25 @@ class NewsAgent:
 
         structured_query = VectorDBQuery(**json_response)
 
+        print(f"Structured query: {structured_query.query}")
+
 
         combined_filter = self.combine_filters(structured_query)
 
-
+        print("Combined filter: ", combined_filter)
         if combined_filter:
-            base_retriever = self.vector_db.as_retriever(search_kwargs={'k': 5, 'filter': combined_filter})
+
+            print("Combined filter: ", combined_filter)
+            print("Query:", structured_query.query)
+
+            base_retriever = self.vector_db.as_retriever(search_kwargs={'k': 4, 'filter': combined_filter})
             context = base_retriever.invoke(structured_query.query)
+
+            for document in context:
+                print(document)
+                print("---")
+
+
 
             structured_context = "\n\n---\n\n".join([
                 f"**Título**: {doc.metadata.get('title', 'Sin título')}\n"
