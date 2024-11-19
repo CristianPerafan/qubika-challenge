@@ -11,11 +11,12 @@
     python -m venv venv
     ```
 3. Activar el entorno virtual
-    Windows
+
+    Windows:
     ```bash
     venv\Scripts\activate
     ```
-    Linux
+    Linux:
     ```bash
     source venv/bin/activate
     ```
@@ -24,6 +25,12 @@
     ```bash
     pip install -r requirements.txt
     ```
-
+   
+5. Crear un archivo `.env` en la raíz del proyecto con las siguientes variables de entorno
+    ```env
+   OPENAI_API_KEY=sk-XXXXXXXX
+   CHROMA_HOST=XXXXXXXX
+   CHROMA_PORT=XXXX
+   ```
 
 

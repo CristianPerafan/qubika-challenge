@@ -1,12 +1,16 @@
 import os
 import shutil
 
+from dotenv import load_dotenv
 from langchain_core.documents import Document
 from langchain_chroma import Chroma
 
 import chromadb
 
+load_dotenv()
 
+CHROMA_HOST = os.getenv("CHROMA_HOST", "localhost")
+CHROMA_PORT = os.getenv("CHROMA_PORT", 8000)
 
 CHROMA_PATH = "chroma"
 def save_to_chroma(chunks: list[Document],embedding_model):
@@ -37,7 +41,7 @@ def load_from_chroma(embedding_model):
     Returns:
         Chroma: Chroma database
     """
-    chroma_client = chromadb.HttpClient(host='localhost', port=8000)
+    chroma_client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
 
     vector_db = Chroma(
         client=chroma_client,
@@ -55,7 +59,7 @@ def save_to_chroma_v2(chunks: list[Document],embedding_model):
         chunks (list[Document]): list of chunks
         embedding_model: embedding model
     """
-    chroma_client = chromadb.HttpClient(host='localhost', port=8000)
+    chroma_client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
 
     if "news" in [c.name for c in chroma_client.list_collections()]:
         chroma_client.delete_collection('news')
