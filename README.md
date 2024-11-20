@@ -61,7 +61,7 @@ Existen dos formas de configurar el proyecto, la primera es utilizando Docker y 
    Para ello, debes seguir los siguientes pasos:
       ```bash
       docker pull chromadb/chroma
-      docker run -d -p 8080:8080 chromadb/chroma
+      docker run -p 8000:8000 chromadb/chroma
       ```
 6. Crear un archivo `.env` en la raíz del proyecto con las siguientes variables de entorno
     ```env
@@ -73,6 +73,7 @@ Existen dos formas de configurar el proyecto, la primera es utilizando Docker y 
     ```bash
     streamlit run app.py
     ```
+8. Acceder a la interfaz web en `http://localhost:8501`
    
 ### **Configuración con Docker Compose**
 
