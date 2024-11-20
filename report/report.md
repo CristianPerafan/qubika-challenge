@@ -64,7 +64,7 @@ en el sistema de generación de respuestas.
 
 El módulo de generación de respuestas tiene como propósito procesar las consultas realizadas por el usuario y 
 proporcionar respuestas coherentes y relevantes. Este módulo utiliza un modelo de lenguaje de gran escala 
-(*Large Language Model*, LLM) de *OpenAI* (*gpt-3.5-turbo-0125*), asistido por el contexto adicional extraído de la base 
+(*Large Language Model*, LLM) de *OpenAI* (*gpt-4o*), asistido por el contexto adicional extraído de la base 
 de datos vectorial.  
 
 El flujo de trabajo de este módulo se estructura de la siguiente manera:  

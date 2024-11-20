@@ -96,9 +96,6 @@ class NewsAgent:
 
         structured_query = VectorDBQuery(**json_response)
 
-        print(f"Structured query: {structured_query.query}")
-
-
         combined_filter = self.combine_filters(structured_query)
 
         if combined_filter:

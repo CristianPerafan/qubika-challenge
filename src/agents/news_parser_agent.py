@@ -42,7 +42,7 @@ class NewsParserAgent:
     def set_up_llm(self):
         if not self.local_agent:
             self.llm = ChatOpenAI(
-                model="gpt-3.5-turbo-0125",
+                model="gpt-4o",
                 temperature=0,
                 max_tokens=None,
                 timeout=None,

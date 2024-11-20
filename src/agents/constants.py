@@ -58,6 +58,9 @@ Un listado numerado. En ese caso, no debes incluir el contenido de las noticia e
 1. Titulo de la noticia 1 - Periodico de la noticia 1 - Autor de la noticia 1
 2. Titulo de la noticia 2 - Periodico de la noticia 2 - Autor de la noticia 2
 3. Titulo de la noticia 3 - Periodico de la noticia 3 - Autor de la noticia 3
+
+En el caso de que las noticias proporcionadas por el contexto no tengo relación con la pregunta principal
+con la pregunta principal, debes responder solo con la noticia que tenga relación más relacionada con la pregunta.
 """
 
 NEWS_AGENT_PROMPT_TEMPLATE_HUMAN = """
