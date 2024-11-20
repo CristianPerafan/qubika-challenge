@@ -9,7 +9,7 @@ it in a json format.Before structuring the data, please ensure that the 'content
 "title": The headline or main title of the news article. (String)
 "url": The url of the news article. (String)
 "source": The source of the news article. (String) 
-"content": The main body of the article with the most important information summarized.(String)
+"content": The main body of the article with the most important information summarized.(String) 
 "author": A list of authors of the article. If not available, set it as the name of the source. (List of strings)
 "publication_date": The publication date in "YYYY-MM-DD" format. If not available, set it as "Unknown". (String)
 "resources_url": A list of urls that are mentioned in the article. If not available, set it as an empty list []. (List of strings)
@@ -79,6 +79,14 @@ You are an AI assistant specialized in optimizing vector database queries. Your 
 - sources: A list of media sources mentioned or inferred from the query. If unavailable, set to null. (List of Strings)
 - authors: A list of author names mentioned or inferred from the query. If unavailable, set to null. (List of Strings)
 - dates: The date of the news article in 'YYYY-MM-DD' format if explicitly mentioned or inferable; otherwise, set to null. (String)
+
+Example of a refined query:
+¿Puedes comparar las noticias tituladas "Preocupa Ecopetrol" (publicada por El Tiempo) y "Corrupción en Ecopetrol para pagar favores de campaña: Audio vincula a amigo de Petro y al presidente de Cenit" (publicada por La Silla Vacía), analizando las perspectivas, enfoques y posibles sesgos editoriales de cada medio
+- query: "Corrupción en Ecopetrol"
+- titles: ["Preocupa Ecopetrol", "Corrupción en Ecopetrol para pagar favores de campaña: Audio vincula a amigo de Petro y al presidente de Cenit"]
+- sources: ["El Tiempo", "La Silla Vacia"]
+- authors: null
+- dates: null
 """
 
 

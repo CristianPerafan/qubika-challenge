@@ -101,20 +101,10 @@ class NewsAgent:
 
         combined_filter = self.combine_filters(structured_query)
 
-        print("Combined filter: ", combined_filter)
         if combined_filter:
-
-            print("Combined filter: ", combined_filter)
-            print("Query:", structured_query.query)
 
             base_retriever = self.vector_db.as_retriever(search_kwargs={'k': 4, 'filter': combined_filter})
             context = base_retriever.invoke(structured_query.query)
-
-            for document in context:
-                print(document)
-                print("---")
-
-
 
             structured_context = "\n\n---\n\n".join([
                 f"**Título**: {doc.metadata.get('title', 'Sin título')}\n"

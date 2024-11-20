@@ -1,5 +1,4 @@
 import os
-import shutil
 
 from dotenv import load_dotenv
 from langchain_core.documents import Document
@@ -12,28 +11,7 @@ load_dotenv()
 CHROMA_HOST = os.getenv("CHROMA_HOST", "localhost")
 CHROMA_PORT = os.getenv("CHROMA_PORT", 8000)
 
-CHROMA_PATH = "chroma"
-def save_to_chroma(chunks: list[Document],embedding_model):
-    """
-    Save chunks to the chroma database
-    Args:
-        chunks (list[Document]): list of chunks
-        embedding_model: embedding model
-    """
-    if os.path.exists(CHROMA_PATH):
-        try:
-            shutil.rmtree(CHROMA_PATH)
-        except Exception as e:
-            print(f"Error al eliminar {CHROMA_PATH}: {e}")
 
-    db = Chroma.from_documents(
-        chunks,
-        persist_directory=CHROMA_PATH,
-        embedding=embedding_model
-    )
-    # Persist the database
-
-    return db
 
 def load_from_chroma(embedding_model):
     """

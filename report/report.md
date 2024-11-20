@@ -76,7 +76,29 @@ El flujo de trabajo de este módulo se estructura de la siguiente manera:
    - **Fechas:** Indicaciones temporales relacionadas con la publicación de noticias.  
 
    Si se identifican uno o más de estos elementos, esta metainformación es utilizada para enriquecer y precisar la 
-   consulta en la base de datos vectorial.  
+   consulta en la base de datos vectorial.
+
+   Ejemplo de consulta: *¿Puedes comparar las noticias tituladas "Preocupa Ecopetrol" (publicada por El Tiempo) y 
+   "Corrupción en Ecopetrol para pagar favores de campaña: Audio vincula a amigo de Petro y al presidente de Cenit" 
+   (publicada por La Silla Vacia), analizando las perspectivas, enfoques y posibles sesgos editoriales de cada medio?*
+    
+    De la anterior consulta se extraen los siguientes elementos:
+    ```json
+    {
+        "titulos": [
+            "Preocupa Ecopetrol",
+            "Corrupción en Ecopetrol para pagar favores de campaña: Audio vincula a amigo de Petro y al presidente de Cenit"
+        ],
+        "fuentes": [
+            "El Tiempo",
+            "La Silla Vacia"
+        ]
+    }
+    ```
+   
+    Con esta información, el sistema puede realizar una búsqueda más precisa en la base de datos vectorial, recuperando
+    los fragmentos de texto correspondientes a cada noticia y proporcionando un análisis comparativo más detallado.
+
 
 2. **Búsqueda en la base de datos vectorial:**  
    - Cuando se dispone de metadatos (como los mencionados anteriormente), la búsqueda utiliza estos parámetros específicos.  
