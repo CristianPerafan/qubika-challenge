@@ -128,26 +128,6 @@ Es importante destacar que todos los módulos del sistema se construyeron utiliz
 interacción entre los diferentes componentes y la integración de los modelos de *OpenAI*.
 
 ## **Pruebas y Resultados**
-
-Para evaluar el desempeño del sistema, se realizaron pruebas de generación de respuestas utilizando `DeepEval`, una 
-herramienta de evaluación de lenguaje natural. A continuación, se describen las dos pruebas principales realizadas:
-
-### **Prueba de Relevancia de Respuestas**  
-En esta prueba se evaluó si las respuestas generadas por el sistema son relevantes respecto a la consulta planteada 
-por el usuario. Para ello, se utilizó la métrica **Answer Relevancy Metric**, la cual compara el contenido de la 
-respuesta generada con el contexto proporcionado por la base de datos vectorial. El objetivo fue garantizar que las 
-respuestas no solo fueran relacionadas temáticamente, sino también útiles para la consulta específica. Se definió un 
-umbral de relevancia de 0.5 como criterio para considerar una respuesta aceptable.
-
-### **Prueba de Exactitud de Respuestas**  
-Esta prueba tuvo como propósito determinar si las respuestas generadas eran correctas respecto a la información 
-contenida en la base de datos vectorial. Para ello, se utilizó la métrica de **Correctness** de `DeepEval`, que compara 
-la respuesta generada con una salida esperada predefinida. La evaluación incluyó un análisis estricto, donde cualquier 
-discrepancia entre la respuesta generada y la esperada era considerada como un fallo. Este enfoque permitió verificar 
-que el modelo no solo ofreciera respuestas relevantes, sino que fueran precisas y consistentes con el contenido de los 
-documentos extraídos.
-
-## **Pruebas**
 Las pruebas se realizarón utilizando `DeepEval`, se buscó evaluar la relevancia y correctitud de las respuestas generadas
 por el sistema. Los resultados obtenidos fueron los siguientes:
 
